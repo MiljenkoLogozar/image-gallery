@@ -32,7 +32,7 @@ const CarouselPage = async ({
 
   return (
     <main className="mx-auto max-w-[1960px] p-4">
-      <CarouselLayout currentPhoto={currentPhoto} />
+      <CarouselLayout currentPhoto={currentPhoto} images={reducedResults} />
     </main>
   );
 };

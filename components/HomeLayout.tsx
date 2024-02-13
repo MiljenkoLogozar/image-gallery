@@ -1,5 +1,5 @@
 "use client"
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useLastViewedPhoto } from "../utils/useLastViewedPhoto";
 import { ImageProps } from "../utils/types";
@@ -10,27 +10,30 @@ import Bridge from "./Icons/Bridge";
 import Logo from "./Icons/Logo";
 
 const HomeLayout = ({ images }: { images: ImageProps[] }) => {
-    const { photoId }: any = useParams();
+    const searchParams = useSearchParams();
+
     const [lastViewedPhoto, setLastViewedPhoto] = useLastViewedPhoto();
 
     const lastViewedPhotoRef = useRef<HTMLAnchorElement>(null as any);
 
     useEffect(() => {
+        console.log("HomeLayout photoId", searchParams.get("photoId"));
+
         // This effect keeps track of the last viewed photo in the modal to keep the index page in sync when the user navigates back
-        if (lastViewedPhoto && !photoId) {
+        if (lastViewedPhoto && !searchParams.get("photoId")) {
             lastViewedPhotoRef.current.scrollIntoView({ block: "center" });
             setLastViewedPhoto(null);
         }
-    }, [photoId, lastViewedPhoto, setLastViewedPhoto]);
+    }, [searchParams.get("photoId"), lastViewedPhoto, setLastViewedPhoto]);
 
     return (
         <>
             <main className="mx-auto max-w-[1960px] p-4">
-                {photoId && (
+                {searchParams.get("photoId") && (
                     <Modal
                         images={images}
                         onClose={() => {
-                            setLastViewedPhoto(photoId as any);
+                            setLastViewedPhoto(searchParams.get("photoId") as any);
                         }}
                     />
                 )}
@@ -59,11 +62,11 @@ const HomeLayout = ({ images }: { images: ImageProps[] }) => {
                             Clone and Deploy
                         </a>
                     </div>
-                    {images.map(({ id, public_id, format, blurDataUrl }) => (
+                    {images?.map(({ id, public_id, format, blurDataUrl }) => (
                         <Link
                             key={id}
                             href={`/?photoId=${id}`}
-                            as={`/p/${id}`}
+                            // as={`/p/${id}`}
                             ref={id === Number(lastViewedPhoto) ? lastViewedPhotoRef : null}
                             shallow
                             className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"

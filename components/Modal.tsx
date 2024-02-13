@@ -1,10 +1,10 @@
 import { Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import useKeypress from "react-use-keypress";
 import type { ImageProps } from "../utils/types";
 import SharedModal from "./SharedModal";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Modal({
   images,
@@ -14,16 +14,16 @@ export default function Modal({
   onClose: () => void;
 }) {
   let overlayRef = useRef(null);
-  const router = useRouter();
+  const router = useRouter()
+  const searchParams = useSearchParams();
 
-  const { photoId } = router.query;
-  let index = Number(photoId);
+  let index = Number(searchParams.get("photoId"));
 
   const [direction, setDirection] = useState(0);
   const [curIndex, setCurIndex] = useState(index);
 
   function handleClose() {
-    router.push("/", undefined, { shallow: true });
+    router.push("/");
     onClose();
   }
 
@@ -34,13 +34,8 @@ export default function Modal({
       setDirection(-1);
     }
     setCurIndex(newVal);
-    router.push(
-      {
-        query: { photoId: newVal },
-      },
-      `/p/${newVal}`,
-      { shallow: true },
-    );
+    // router.push(`/p/${newVal}`);
+    router.push(`/?photoId=${newVal}`);
   }
 
   useKeypress("ArrowRight", () => {
