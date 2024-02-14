@@ -2,7 +2,9 @@ import "./globals.css"
 import cloudinary from "../../utils/cloudinary";
 import getBase64ImageUrl from "../../utils/generateBlurPlaceholder";
 import type { ImageProps } from "../../utils/types";
-import HomeLayout from "../../components/HomeLayout";
+import dynamic from "next/dynamic";
+
+const HomeLayout = dynamic(() => import("../../components/HomeLayout"), { ssr: false })
 
 const HomePage = async () => {
   const results = await cloudinary.v2.search
@@ -35,6 +37,7 @@ const HomePage = async () => {
     reducedResults[i].blurDataUrl = imagesWithBlurDataUrls[i];
   }
   return <HomeLayout images={reducedResults} />
+  return <h1>Test</h1>
 
 }
 export default HomePage;
