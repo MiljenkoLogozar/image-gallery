@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useLastViewedPhoto } from "../utils/useLastViewedPhoto";
@@ -68,7 +68,7 @@ const HomeLayout = ({ images }: { images: ImageProps[] }) => {
                             href={`/?photoId=${id}`}
                             // as={`/p/${id}`}
                             ref={id === Number(lastViewedPhoto) ? lastViewedPhotoRef : null}
-                            shallow
+                            // shallow
                             className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                         >
                             <Image

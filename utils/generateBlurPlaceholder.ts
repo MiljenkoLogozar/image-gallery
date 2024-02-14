@@ -8,28 +8,37 @@ export default async function getBase64ImageUrl(
   image: ImageProps,
 ): Promise<string> {
   let url = cache.get(image);
-  console.log("getBase64ImageUrl url", url, image);
+  // console.log("getBase64ImageUrl url", url, image);
 
   if (url) {
     return url;
   }
+
+  // const getBase64 = (file: FileType): Promise<string> =>
+  // new Promise((resolve, reject) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = () => resolve(reader.result as string);
+  //   reader.onerror = (error) => reject(error);
+  // });
+  
   const fetchUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/f_jpg,w_8,q_70/${image.public_id}.${image.format}`
-  console.log("fetchUrl", fetchUrl);
+  // console.log("fetchUrl", fetchUrl);
   const response = await fetch(fetchUrl);
-  console.log("response", response.status);
+  // console.log("response", response.status);
 
   const buffer = await response.arrayBuffer();
-  console.log("buffer", buffer);
+  // console.log("buffer", buffer);
 
   // const minified = await imagemin.buffer(Buffer.from(buffer), {
   //   plugins: [imageminJpegtran()],
   // });
 
   // console.log("minified",minified);
-  
 
-  // url = `data:image/jpeg;base64,${Buffer.from(minified).toString("base64")}`;
-  // cache.set(image, url);
-  // return url;
+
+  url = `data:image/jpeg;base64,${Buffer.from(buffer).toString("base64")}`;
+  cache.set(image, url);
+  return url;
   return fetchUrl
 }

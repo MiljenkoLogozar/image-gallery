@@ -10,7 +10,7 @@ const HomePage = async () => {
     .sort_by("public_id", "desc")
     .max_results(400)
     .execute();
-  console.log("results", results);
+  // console.log("results", results);
 
   let reducedResults: ImageProps[] = [];
   let i = 0;
@@ -29,7 +29,7 @@ const HomePage = async () => {
     return getBase64ImageUrl(image);
   });
   const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
-  console.log("imagesWithBlurDataUrls", imagesWithBlurDataUrls);
+  // console.log("imagesWithBlurDataUrls", imagesWithBlurDataUrls);
 
   for (let i = 0; i < reducedResults.length; i++) {
     reducedResults[i].blurDataUrl = imagesWithBlurDataUrls[i];
